@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <!-- [RESPONSIF 1] Viewport: membuat halaman menyesuaikan lebar layar HP -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mie Ayam Semarang</title>
+
+    <!-- Bootstrap 5.3.8 lewat CDN (butuh internet saat dibuka) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+
+    <!-- ===================== CSS ===================== -->
+    <style>
+        /* ---------- Pengaturan dasar ---------- */
+        :root {
+            --warna-utama: #e8590c;
+            --warna-kuning: #ffc107;
+            --warna-gelap: #3b2314;
+        }
+        html { scroll-behavior: smooth; scroll-padding-top: 75px; }
+        body { padding-top: 70px; background-color: #fffaf0; color: #333; }
+        h2, h3 { color: var(--warna-utama); }
+        section { margin-bottom: 3rem; }
+
+        /* ---------- Navbar + efek HOVER ---------- */
+        .navbar { background-color: var(--warna-kuning); }
+        .navbar-brand { font-weight: 700; color: var(--warna-gelap) !important; }
+        .navbar .nav-link { color: var(--warna-gelap); border-radius: 6px; transition: 0.3s; }
+        /* HOVER 1: menu berubah warna */
+        .navbar .nav-link:hover { background-color: var(--warna-utama); color: #fff; }
+        /* HOVER 2: item dropdown berubah warna dan bergeser sedikit */
+        .dropdown-item { transition: 0.2s; }
+        .dropdown-item:hover { background-color: var(--warna-utama); color: #fff; padding-left: 1.5rem; }
+
+        /* HOVER 3 (hovbar): dropdown warung terbuka saat kursor diarahkan, hanya di layar lebar */
+        @media (min-width: 992px) {
+            .navbar .dropdown:hover > .dropdown-menu { display: block; margin-top: 0; }
+        }
+
+        /* ---------- Kotak gambar (source dikosongkan, isi sendiri) ---------- */
+        .kotak-gambar {
+            background-color: #f1e3cf;
+            border: 2px dashed #d9b98c;
+            min-height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .kotak-gambar img { width: 100%; height: 100%; object-fit: cover; }
+        .gambar-hero { max-width: 100%; height: 260px; }
+
+        /* ---------- Kartu warung + HOVER ---------- */
+        .kartu-warung { transition: transform 0.3s, box-shadow 0.3s; border: 0; }
+        /* HOVER 4: kartu naik dan bayangan menebal */
+        .kartu-warung:hover { transform: translateY(-8px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .kartu-warung .kotak-gambar { height: 200px; }
+
+        .kartu-warung .card-title a { color: var(--warna-utama); text-decoration: none; }
+        /* HOVER 4b: judul warung (tautan Google Maps) bergaris bawah */
+        .kartu-warung .card-title a:hover { color: var(--warna-gelap); text-decoration: underline; }
+
+        /* HOVER 5: baris tabel berubah warna */
+        .table-warung tbody tr:hover { background-color: #ffe8cc; }
+        .table-warung thead th { background-color: var(--warna-utama); color: #fff; }
+
+        /* ---------- Daftar rekomendasi pengunjung ---------- */
+        .rekomendasi-item { border-left: 5px solid var(--warna-utama); background: #fff; }
+
+        /* ---------- Footer ---------- */
+        footer { background-color: var(--warna-gelap); color: #f5e6d3; padding: 2.5rem 0 1rem; }
+        footer h2, footer h3 { color: var(--warna-kuning); }
+        footer .form-label { font-weight: 600; }
+        /* HOVER 6: tombol kirim */
+        footer .btn-warning:hover { background-color: var(--warna-utama); color: #fff; }
+
+        /* [RESPONSIF 2] Media query: tampilan khusus layar HP (lebar maksimal 576px) */
+        @media (max-width: 576px) {
+            .gambar-hero { height: 180px; }
+            h1 { font-size: 1.6rem; }
+            .identitas { text-align: center; margin-bottom: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===================== NAVBAR (HTML) ===================== -->
+<!-- [RESPONSIF 3] navbar-expand-lg: menu jadi tombol hamburger di layar kecil -->
+<nav class="navbar navbar-expand-lg fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="#beranda">&#127836; Mie Ayam Semarang</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuUtama" aria-controls="menuUtama" aria-expanded="false" aria-label="Buka menu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="menuUtama">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link" href="#beranda">Beranda</a></li>
+        <li class="nav-item"><a class="nav-link" href="#pengertian">Pengertian</a></li>
+        <li class="nav-item"><a class="nav-link" href="#asalusul">Asal Usul</a></li>
+        <!-- Dropdown warung: terbuka saat di-hover (layar lebar) atau diklik (HP) -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#warung" role="button" data-bs-toggle="dropdown" aria-expanded="false">Warung Mie Ayam</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#gajahjaya">Mie Ayam Jakarta Gajah Jaya</a></li>
+            <li><a class="dropdown-item" href="#pakjoko">Mie Ayam Pak Joko</a></li>
+            <li><a class="dropdown-item" href="#juki">Mie Ayam dan Bakso Juki</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#warung">Lihat semua warung</a></li>
+          </ul>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="#rekomendasi">Rekomendasi</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<main class="container">
+
+    <!-- ===================== BERANDA ===================== -->
+    <header id="beranda" class="row align-items-center g-3 my-3">
+        <!-- [RESPONSIF 4] Grid Bootstrap: 2 kolom di laptop, bertumpuk di HP -->
+        <div class="col-12 col-md-5">
+            <div class="kotak-gambar gambar-hero rounded">
+                <!-- Isi sendiri source gambar -->
+                <img src="Images/MieAyam_BG.jpeg" alt="Semangkuk mie ayam" class="img-fluid">
+            </div>
+        </div>
+        <div class="col-12 col-md-7">
+            <h1 class="h2 mb-2">Mie Ayam, Semangkuk Kenangan dari Kota Semarang</h1>
+            <p class="text-muted">Mari mengenal pengertian, asal usul, dan beberapa warung mie ayam di Semarang. Punya warung favorit? Tulis rekomendasimu di bagian bawah halaman.</p>
+            <a href="#warung" class="btn btn-warning">Lihat Warung</a>
+            <a href="#rekomendasi-form" class="btn btn-outline-secondary">Beri Rekomendasi</a>
+        </div>
+        <hr class="mt-3">
+    </header>
+
+    <!-- ===================== PENGERTIAN ===================== -->
+    <section id="pengertian">
+        <h2>A. Pengertian Mie Ayam</h2>
+        <div class="row g-4 align-items-center">
+            <div class="col-12 col-md-7">
+                <p>Mie ayam adalah hidangan mie yang disajikan dengan potongan daging ayam berbumbu, biasanya berwarna cokelat karena dimasak dengan kecap, bawang putih, dan rempah. Mie direbus sebentar, ditiriskan, lalu dicampur minyak ayam dan bumbu sehingga terasa gurih.</p>
+                <p>Hidangan ini umumnya dilengkapi sawi hijau, taburan bawang goreng, dan daun bawang. Pelengkapnya beragam, seperti pangsit goreng atau rebus, bakso, ceker, jamur, dan telur. Kuah kaldu ayam biasanya disajikan terpisah di mangkuk kecil.</p>
+                <p class="mb-0">Karena harganya terjangkau, mudah ditemukan, dan mengenyangkan, mie ayam digemari semua kalangan, dari pelajar sampai pekerja kantoran. Bahkan nenek saya juga suka.</p>
+            </div>
+            <div class="col-12 col-md-5">
+                <div class="kotak-gambar rounded">
+                    <img src="Images/MieAyaamm.jpeg" alt="Bahan mie ayam" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== ASAL USUL ===================== -->
+    <section id="asalusul">
+        <h2>B. Asal Usul</h2>
+        <div class="row g-4 align-items-center flex-md-row-reverse">
+            <div class="col-12 col-md-5">
+                <div class="kotak-gambar rounded">
+                    <img src="Images/Suasana_MieAyam.jpeg" alt="Suasana warung mie ayam" class="img-fluid">
+                </div>
+            </div>
+            <div class="col-12 col-md-7">
+                <p>Mie sendiri berasal dari budaya kuliner Tiongkok. Para perantau dari Tiongkok yang menetap di Nusantara membawa kebiasaan membuat dan menyantap mie, lalu menjualnya di berbagai kota.</p>
+                <p>Seiring waktu, mie tersebut disesuaikan dengan selera lokal. Daging ayam dimasak dengan kecap manis dan bumbu khas Indonesia, sehingga lahirlah mie ayam yang kita kenal sekarang. Hal ini umumnya dipahami sebagai hasil perpaduan budaya, sehingga sulit menunjuk satu tanggal atau satu penemu pasti.</p>
+                <p class="mb-0">Di setiap daerah, mie ayam punya ciri sendiri. Di Semarang, kamu bisa menemukan mie ayam dengan mangkuk dari pangsit, versi bergaya Jakarta, sampai mie ayam yang dipadukan dengan bakso.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== WARUNG MIE AYAM DI SEMARANG ===================== -->
+    <section id="warung">
+        <h2>C. Warung Mie Ayam di Semarang</h2>
+        <p>Berikut beberapa warung mie ayam yang sering direkomendasikan warga Semarang. Arahkan kursor ke menu <strong>Warung Mie Ayam</strong> di atas untuk melompat langsung ke warungnya.</p>
+
+        <!-- [RESPONSIF 5] col-12 (HP: 1 kartu) col-md-6 (tablet: 2 kartu) col-lg-4 (laptop: 3 kartu) -->
+        <div class="row g-4 mb-4">
+            <div class="col-12 col-md-6 col-lg-4" id="gajahjaya">
+                <div class="card kartu-warung h-100 shadow-sm">
+                    <div class="kotak-gambar"><img src="Images/MieAyam_GajahJaya.jpeg" alt="Mie Ayam Jakarta Gajah Jaya"></div>
+                    <div class="card-body">
+                        <h3 class="h5 card-title"><a href="https://www.google.com/maps/search/?api=1&amp;query=Mie+Ayam+Jakarta+Gajah+Jaya+Semarang" target="_blank" rel="noopener">Mie Ayam Jakarta Gajah Jaya</a></h3>
+                        <p class="card-text">Warung langganan warga Semarang dengan pilihan topping seperti pangsit, telur, dan ceker ayam.</p>
+                        <small class="text-muted">Jl. Sultan Agung No. 129 A, Kaliwiru</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4" id="pakjoko">
+                <div class="card kartu-warung h-100 shadow-sm">
+                    <div class="kotak-gambar"><img src="Images/MieAyam_PakJoko.jpeg" alt="Mie Ayam Pak Joko"></div>
+                    <div class="card-body">
+                        <h3 class="h5 card-title"><a href="https://www.google.com/maps/search/?api=1&amp;query=Mie+Ayam+Pak+Joko+Tlogosari+Semarang" target="_blank" rel="noopener">Mie Ayam Pak Joko</a></h3>
+                        <p class="card-text">Ciri khasnya mangkuk yang terbuat dari pangsit. Bisa ditambah bakso, dengan harga yang ramah di kantong.</p>
+                        <small class="text-muted">Jl. Satrio Wibowo I, Tlogosari</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4" id="juki">
+                <div class="card kartu-warung h-100 shadow-sm">
+                    <div class="kotak-gambar"><img src="Images/MieAyam_Juki.jpeg" alt="Mie Ayam dan Bakso Juki"></div>
+                    <div class="card-body">
+                        <h3 class="h5 card-title"><a href="https://www.google.com/maps/search/?api=1&amp;query=Mie+Ayam+dan+Bakso+Juki+Semarang" target="_blank" rel="noopener">Mie Ayam dan Bakso Juki</a></h3>
+                        <p class="card-text">Warung mie ayam dengan harga terjangkau mulai dari Rp.7000 yang pastinya ramah di kantong Mahasiswa namun tetap dengan rasa yang nikmat.</p>
+                        <small class="text-muted">Jl. Arjuna No.15, Pendrikan Kidul</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabel ringkasan: table-responsive agar bisa digeser ke samping di HP -->
+        <h3 class="h5">Ringkasan</h3>
+        <div class="table-responsive">
+            <table class="table table-bordered align-middle table-warung">
+                <thead>
+                    <tr><th>Warung</th><th>Lokasi</th><th>Jam Buka</th><th>Kisaran Harga</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Mie Ayam Jakarta Gajah Jaya</td><td>Jl. Sultan Agung No. 129 A Kaliwiru</td><td>09.00 &ndash; 21.00</td><td>Rp15.000 &ndash; Rp200</td></tr>
+                    <tr><td>Mie Ayam Pak Joko</td><td>Jl. Satrio Wibowo I, Tlogosari</td><td>10.00 &ndash; 20.00</td><td>Mulai Rp10.000</td></tr>
+                    <tr><td>Mie Ayam dan Bakso Juki</td><td>Jl. Arjuna No.15, Pendrikan Kidul</td><td>11.00 &ndash; 21.00</td><td>Mulai Rp.7000</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <p class="small text-muted">Catatan: jam buka dan harga bersumber dari ulasan kuliner dan bisa berubah. Sebaiknya dicek ulang sebelum berkunjung.</p>
+    </section>
+
+    <!-- ===================== REKOMENDASI DARI PENGUNJUNG ===================== -->
+    <section id="rekomendasi">
+        <h2>D. Rekomendasi dari Pengunjung</h2>
+        <p>Rekomendasi yang dikirim lewat form di bagian bawah halaman akan tampil di sini.</p>
+        <div id="daftarRekomendasi">
+            <p class="text-muted fst-italic" id="rekomendasiKosong">Belum ada rekomendasi. Jadilah yang pertama!</p>
+        </div>
+    </section>
+</main>
+
+<!-- ===================== FOOTER: NAMA, NIM, DAN FORM ===================== -->
+<footer>
+    <div class="container">
+        <div class="row g-4">
+            <!-- Identitas -->
+            <div class="col-12 col-lg-4 identitas">
+                <h2 class="h4">Identitas</h2>
+                <p class="mb-1"><strong>Nama:</strong> Rizqi Aulia</p>
+                <p class="mb-1"><strong>NIM:</strong> A12.2025.07367</p>
+                <p class="mb-0">Sistem Informasi, Universitas Dian Nuswantoro</p>
+            </div>
+
+            <!-- Form rekomendasi (Bootstrap) -->
+            <div class="col-12 col-lg-8" id="rekomendasi-form">
+                <h2 class="h4">Form Rekomendasi Mie Ayam</h2>
+                <p>Ceritakan warung mie ayam favoritmu di Semarang dan menangkan hadiah undiannya!</p>
+
+                <form id="formRekomendasi" novalidate>
+                    <!-- Nama: type text -->
+                    <div class="mb-3">
+                        <label for="fnama" class="form-label">Nama Lengkap</label>
+                        <input type="text" class="form-control" id="fnama" name="fnama" placeholder="Nama kamu" required>
+                        <div class="invalid-feedback">Nama wajib diisi.</div>
+                    </div>
+
+                    <!-- Alamat: tag textarea -->
+                    <div class="mb-3">
+                        <label for="falamat" class="form-label">Alamat Email</label>
+                        <textarea class="form-control" id="falamat" name="falamat" rows="2" placeholder="Alamat email kamu" required></textarea>
+                        <div class="invalid-feedback">Alamat Email wajib diisi menggunakan format email@gmail.com.</div>
+                    </div>
+
+                    <!-- Jenis kelamin: radio button -->
+                    <div class="mb-3">
+                        <span class="form-label d-block">Jenis Kelamin</span>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" id="pria" name="fjkel" value="Laki-laki" required>
+                            <label class="form-check-label" for="pria">Laki-laki</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" id="wanita" name="fjkel" value="Perempuan" required>
+                            <label class="form-check-label" for="wanita">Perempuan</label>
+                        </div>
+                        <div class="text-warning small d-none" id="galatJkel">Pilih salah satu jenis kelamin.</div>
+                    </div>
+
+                    <!-- Dropdown: select -->
+                    <div class="mb-3">
+                        <label for="fwarung" class="form-label">Warung yang Direkomendasikan</label>
+                        <select class="form-select" id="fwarung" name="fwarung" required>
+                            <option value="" selected disabled>-- Pilih Warung --</option>
+                            <option>Mie Ayam Jakarta Gajah Jaya</option>
+                            <option>Mie Ayam Pak Joko</option>
+                            <option>Mie Ayam dan Bakso Juki</option>
+                            <option>Warung lainnya</option>
+                        </select>
+                        <div class="invalid-feedback">Pilih salah satu warung.</div>
+                    </div>
+
+                    <!-- Pilihan ganda: checkbox (boleh dipilih lebih dari satu) -->
+                    <div class="mb-3">
+                        <span class="form-label d-block">Variasi Menu yang Tersedia di Warung Tersebut</span>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="mAyam" name="fmenu[]" value="Mie ayam saja">
+                            <label class="form-check-label" for="mAyam">Mie ayam saja</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="mBakso" name="fmenu[]" value="Bakso">
+                            <label class="form-check-label" for="mBakso">Bakso</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="mAyamBakso" name="fmenu[]" value="Mie ayam bakso">
+                            <label class="form-check-label" for="mAyamBakso">Mie ayam bakso</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="mGoreng" name="fmenu[]" value="Mie ayam goreng">
+                            <label class="form-check-label" for="mGoreng">Mie ayam goreng</label>
+                        </div>
+                        <div class="text-warning small d-none" id="galatMenu">Pilih minimal satu variasi menu.</div>
+                    </div>
+
+                    <!-- Tulisan rekomendasi: tag textarea -->
+                    <div class="mb-3">
+                        <label for="fpesan" class="form-label">Tulisan Rekomendasi</label>
+                        <textarea class="form-control" id="fpesan" name="fpesan" rows="4" maxlength="300" placeholder="Kenapa mie ayam ini layak dicoba? Sebutkan nama warungnya jika kamu klik opsi warung lainnya pada sebelumnya" required></textarea>
+                        <div class="d-flex justify-content-between">
+                            <div class="invalid-feedback">Tulisan rekomendasi wajib diisi.</div>
+                            <small class="ms-auto" id="hitungKarakter">0 / 300</small>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-warning">Kirim Rekomendasi</button>
+                    <button type="reset" class="btn btn-outline-light" id="tombolBatal">Batal</button>
+                </form>
+            </div>
+        </div>
+        <hr class="mt-4">
+        <p class="text-center small mb-0">&copy; <span id="tahun">2026</span> Rizqi Aulia (A12.2025.07367) &ndash; Mie Ayam Semarang</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- ===================== JAVASCRIPT ===================== -->
+<script>
+    // 1. Tahun di footer terisi otomatis
+    document.getElementById("tahun").textContent = new Date().getFullYear();
+
+    // 2. Penghitung karakter pada kolom tulisan rekomendasi
+    var kolomPesan = document.getElementById("fpesan");
+    var penghitung = document.getElementById("hitungKarakter");
+    kolomPesan.addEventListener("keyup", function () {
+        penghitung.textContent = kolomPesan.value.length + " / 300";
+    });
+
+    // 3. [RESPONSIF 6] Menu hamburger menutup sendiri setelah salah satu menu diklik di HP
+    var menuUtama = document.getElementById("menuUtama");
+    document.querySelectorAll("#menuUtama a:not(.dropdown-toggle)").forEach(function (tautan) {
+        tautan.addEventListener("click", function () {
+            if (menuUtama.classList.contains("show")) {
+                bootstrap.Collapse.getOrCreateInstance(menuUtama).hide();
+            }
+        });
+    });
+
+    // 4. Validasi form lalu tampilkan rekomendasi ke daftar
+    var form = document.getElementById("formRekomendasi");
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        var jkel = form.querySelector('input[name="fjkel"]:checked');
+        var galatJkel = document.getElementById("galatJkel");
+        galatJkel.classList.toggle("d-none", jkel !== null);
+
+        // Ambil semua variasi menu yang dicentang
+        var menuDipilih = [];
+        form.querySelectorAll('input[name="fmenu[]"]:checked').forEach(function (cb) {
+            menuDipilih.push(cb.value);
+        });
+        document.getElementById("galatMenu").classList.toggle("d-none", menuDipilih.length > 0);
+
+        form.classList.add("was-validated");
+        if (!form.checkValidity() || jkel === null || menuDipilih.length === 0) {
+            return;
+        }
+
+        // Susun kartu rekomendasi (memakai textContent agar aman dari kode HTML)
+        var kartu = document.createElement("div");
+        kartu.className = "rekomendasi-item p-3 mb-3 rounded shadow-sm";
+
+        var judul = document.createElement("h3");
+        judul.className = "h6 mb-1";
+        judul.textContent = form.fwarung.value;
+
+        var menuTeks = document.createElement("p");
+        menuTeks.className = "mb-1 small";
+        menuTeks.textContent = "Variasi menu: " + menuDipilih.join(", ");
+
+        var isi = document.createElement("p");
+        isi.className = "mb-1";
+        isi.textContent = form.fpesan.value;
+
+        var pengirim = document.createElement("small");
+        pengirim.className = "text-muted";
+        pengirim.textContent = "Oleh " + form.fnama.value + " (" + jkel.value + "), " + form.falamat.value;
+
+        kartu.appendChild(judul);
+        kartu.appendChild(menuTeks);
+        kartu.appendChild(isi);
+        kartu.appendChild(pengirim);
+
+        var daftar = document.getElementById("daftarRekomendasi");
+        var kosong = document.getElementById("rekomendasiKosong");
+        if (kosong) { kosong.remove(); }
+        daftar.prepend(kartu);
+
+        // Kosongkan form
+        form.reset();
+        form.classList.remove("was-validated");
+        penghitung.textContent = "0 / 300";
+        document.getElementById("galatMenu").classList.add("d-none");
+        alert("Terima kasih! Rekomendasimu sudah ditampilkan di bagian Rekomendasi dari Pengunjung.");
+        document.getElementById("rekomendasi").scrollIntoView();
+    });
+
+    // 5. Tombol batal membersihkan tanda validasi
+    document.getElementById("tombolBatal").addEventListener("click", function () {
+        form.classList.remove("was-validated");
+        document.getElementById("galatJkel").classList.add("d-none");
+        document.getElementById("galatMenu").classList.add("d-none");
+        penghitung.textContent = "0 / 300";
+    });
+</script>
+</body>
+</html>
